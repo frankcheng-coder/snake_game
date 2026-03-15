@@ -150,14 +150,20 @@ function renderBoard() {
 
 function render() {
   const cells = board.children;
+  const head = state.snake[0];
+  const tail = state.snake[state.snake.length - 1];
 
   for (let y = 0; y < GRID_SIZE; y += 1) {
     for (let x = 0; x < GRID_SIZE; x += 1) {
       const cell = cells[y * GRID_SIZE + x];
       cell.className = "cell";
 
-      if (state.snake.some((segment) => segment.x === x && segment.y === y)) {
-        cell.classList.add("snake");
+      if (head.x === x && head.y === y) {
+        cell.classList.add("snake-head", `direction-${state.direction}`);
+      } else if (tail.x === x && tail.y === y) {
+        cell.classList.add("snake-tail");
+      } else if (state.snake.some((segment, index) => index > 0 && index < state.snake.length - 1 && segment.x === x && segment.y === y)) {
+        cell.classList.add("snake-body");
       } else if (positionsEqual(state.food, { x, y })) {
         cell.classList.add("food");
       }
